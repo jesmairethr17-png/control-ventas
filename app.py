@@ -295,8 +295,8 @@ def main(page: ft.Page):
         txt_buscar = ft.TextField(label="Buscar por nombre de cliente...", prefix_icon=ft.Icons.SEARCH, border=ft.OutlineInputBorder(border_radius=12), filled=True, bgcolor="white")
         txt_total_fiado = ft.Text("Total en deudas pendientes: $ 0", size=15, weight=ft.FontWeight.BOLD, color="red")
         
-        txt_id_pagar = ft.TextField(label="Nº de Registro a Pagar", width=200, border=ft.OutlineInputBorder(border_radius=12), filled=True, bgcolor="white", keyboard_type=ft.KeyboardType.NUMBER)
-        txt_id_borrar_venta = ft.TextField(label="Nº a Borrar", width=200, border=ft.OutlineInputBorder(border_radius=12), filled=True, bgcolor="white", keyboard_type=ft.KeyboardType.NUMBER)
+        txt_id_pagar = ft.TextField(label="Nº de Registro a Pagar", border=ft.OutlineInputBorder(border_radius=12), filled=True, bgcolor="white", keyboard_type=ft.KeyboardType.NUMBER)
+        txt_id_borrar_venta = ft.TextField(label="Nº a Borrar", border=ft.OutlineInputBorder(border_radius=12), filled=True, bgcolor="white", keyboard_type=ft.KeyboardType.NUMBER)
         
         mapa_ventas_ids = {}
         tabla_historial = ft.DataTable(
@@ -429,27 +429,33 @@ def main(page: ft.Page):
 
             txt_buscar.on_change = mostrar_vista_cuaderno
             
-            # Contenedores con scroll horizontal nativo para las tablas grandes y el total de fiados
+            # Campos organizados verticalmente para que entren perfectamente en la pantalla del teléfono
             vista_principal.content = ft.Column(
                 [
                     ft.Text("Registrar Venta (Formato Cuaderno)", size=16, weight=ft.FontWeight.BOLD),
-                    ft.Row([txt_fecha, btn_calendario]),
-                    ft.Row([txt_cliente, txt_producto]),
-                    ft.Row([txt_peso, txt_precio_total]),
-                    ft.Row([dd_metodo_pago, dd_estado]),
+                    ft.Row([txt_fecha, btn_calendario], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
+                    txt_cliente,
+                    txt_producto,
+                    txt_peso,
+                    txt_precio_total,
+                    dd_metodo_pago,
+                    dd_estado,
                     ft.Button("Registrar en el Cuaderno", icon=ft.Icons.CHECK, on_click=guardar_venta, bgcolor="amber", color="white"),
                     ft.Divider(),
                     ft.Text("Actualizar o Borrar Registros", size=16, weight=ft.FontWeight.BOLD),
-                    ft.Row([txt_id_pagar, ft.OutlinedButton("Marcar como Pagado", icon=ft.Icons.TASK_ALT, on_click=marcar_como_pagado)], spacing=10),
-                    ft.Row([txt_id_borrar_venta, ft.OutlinedButton("Eliminar Venta", icon=ft.Icons.DELETE, on_click=borrar_venta, style=ft.ButtonStyle(color="red"))], spacing=10),
+                    txt_id_pagar,
+                    ft.OutlinedButton("Marcar como Pagado", icon=ft.Icons.TASK_ALT, on_click=marcar_como_pagado),
+                    txt_id_borrar_venta,
+                    ft.OutlinedButton("Eliminar Venta", icon=ft.Icons.DELETE, on_click=borrar_venta, style=ft.ButtonStyle(color="red")),
                     ft.Divider(),
                     ft.Row([ft.Text("Historial de Registros", size=16, weight=ft.FontWeight.BOLD), txt_total_fiado], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
                     txt_buscar,
-                    # Tabla envuelta en un contenedor con scroll horizontal para deslizarse a los lados sin romper la pantalla
+                    # Tabla envuelta en scroll horizontal para deslizar libremente de lado a lado
                     ft.Row([tabla_historial], scroll=ft.ScrollMode.AUTO),
-                    ft.Container(height=150), # Margen inferior cómodo para el teclado del teléfono
+                    ft.Container(height=250), # Espacio inferior para que el teclado no tape los campos
                 ],
                 scroll=ft.ScrollMode.AUTO,
+                spacing=12,
             )
             page.update()
 
@@ -552,15 +558,17 @@ def main(page: ft.Page):
             vista_principal.content = ft.Column(
                 [
                     ft.Text("Cargar Pedazos de Queso (Picar Barra)", size=16, weight=ft.FontWeight.BOLD),
-                    ft.Row([txt_nombre_barra, txt_peso_pedazo, txt_precio_pedazo]),
+                    txt_nombre_barra,
+                    txt_peso_pedazo,
+                    txt_precio_pedazo,
                     ft.Button("Agregar Pedazo a Vitrina", icon=ft.Icons.ADD_SHOPPING_CART, on_click=agregar_pedazo, bgcolor="amber", color="white"),
                     ft.Divider(),
                     ft.Text("Stock de Pedazos en Vitrina", size=16, weight=ft.FontWeight.BOLD),
-                    # Tabla de inventario con scroll horizontal para poder deslizarla de lado a lado
                     ft.Row([tabla_inventario], scroll=ft.ScrollMode.AUTO),
-                    ft.Container(height=150),
+                    ft.Container(height=250),
                 ],
                 scroll=ft.ScrollMode.AUTO,
+                spacing=12,
             )
             page.update()
 
