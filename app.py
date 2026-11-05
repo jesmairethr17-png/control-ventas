@@ -154,7 +154,6 @@ def main(page: ft.Page):
                 ft.Container(height=10),
                 ft.Button("Registrarse", icon=ft.Icons.CHECK, on_click=ejecutar_registro, bgcolor="amber", color="white"),
                 ft.OutlinedButton("Volver al Login", icon=ft.Icons.ARROW_BACK, on_click=lambda e: cargar_pantalla_login()),
-                ft.Container(height=250),
             ],
             horizontal_alignment=ft.CrossAxisAlignment.CENTER,
             scroll=ft.ScrollMode.AUTO,
@@ -232,7 +231,6 @@ def main(page: ft.Page):
                 btn_verificar_user,
                 btn_cambiar_pass,
                 ft.OutlinedButton("Cancelar", icon=ft.Icons.CANCEL, on_click=lambda e: cargar_pantalla_login()),
-                ft.Container(height=250),
             ],
             horizontal_alignment=ft.CrossAxisAlignment.CENTER,
             scroll=ft.ScrollMode.AUTO,
@@ -276,12 +274,7 @@ def main(page: ft.Page):
         if date_picker not in page.overlay:
             page.overlay.append(date_picker)
             
-        btn_calendario = ft.IconButton(
-            icon=ft.Icons.DATE_RANGE, 
-            icon_color="amber", 
-            tooltip="Abrir Calendario",
-            on_click=lambda e: setattr(date_picker, "open", True) or page.update()
-        )
+        btn_calendario = ft.IconButton(icon=ft.Icons.DATE_RANGE, icon_color="amber", on_click=lambda e: setattr(date_picker, "open", True) or page.update())
         
         txt_cliente = ft.TextField(label="Nombre del Cliente", prefix_icon=ft.Icons.PERSON, border=ft.OutlineInputBorder(border_radius=12), filled=True, bgcolor="white")
         txt_producto = ft.TextField(label="Tipo de Queso / Producto", prefix_icon=ft.Icons.SHOPPING_BAG, border=ft.OutlineInputBorder(border_radius=12), filled=True, bgcolor="white")
@@ -302,8 +295,8 @@ def main(page: ft.Page):
         txt_buscar = ft.TextField(label="Buscar por nombre de cliente...", prefix_icon=ft.Icons.SEARCH, border=ft.OutlineInputBorder(border_radius=12), filled=True, bgcolor="white")
         txt_total_fiado = ft.Text("Total en deudas pendientes: $ 0", size=15, weight=ft.FontWeight.BOLD, color="red")
         
-        txt_id_pagar = ft.TextField(label="Nº de Registro a Pagar", border=ft.OutlineInputBorder(border_radius=12), filled=True, bgcolor="white", keyboard_type=ft.KeyboardType.NUMBER)
-        txt_id_borrar_venta = ft.TextField(label="Nº a Borrar", border=ft.OutlineInputBorder(border_radius=12), filled=True, bgcolor="white", keyboard_type=ft.KeyboardType.NUMBER)
+        txt_id_pagar = ft.TextField(label="Nº de Registro a Pagar", width=200, border=ft.OutlineInputBorder(border_radius=12), filled=True, bgcolor="white", keyboard_type=ft.KeyboardType.NUMBER)
+        txt_id_borrar_venta = ft.TextField(label="Nº a Borrar", width=200, border=ft.OutlineInputBorder(border_radius=12), filled=True, bgcolor="white", keyboard_type=ft.KeyboardType.NUMBER)
         
         mapa_ventas_ids = {}
         tabla_historial = ft.DataTable(
@@ -436,26 +429,25 @@ def main(page: ft.Page):
 
             txt_buscar.on_change = mostrar_vista_cuaderno
             
-            # Vista del cuaderno con scroll horizontal habilitado en las filas clave y espacio para el teclado
+            # Contenedores con scroll horizontal nativo para las tablas grandes y el total de fiados
             vista_principal.content = ft.Column(
                 [
                     ft.Text("Registrar Venta (Formato Cuaderno)", size=16, weight=ft.FontWeight.BOLD),
-                    ft.Row([txt_fecha, btn_calendario], scroll=ft.ScrollMode.AUTO),
-                    txt_cliente,
-                    txt_producto,
-                    ft.Row([txt_peso, txt_precio_total], scroll=ft.ScrollMode.AUTO),
-                    ft.Row([dd_metodo_pago, dd_estado], scroll=ft.ScrollMode.AUTO),
-                    ft.Button("Registrar en el Cuaderno", icon=ft.Icons.CHECK, on_click=guardar_venta, bgcolor="amber", color="white", width=250),
+                    ft.Row([txt_fecha, btn_calendario]),
+                    ft.Row([txt_cliente, txt_producto]),
+                    ft.Row([txt_peso, txt_precio_total]),
+                    ft.Row([dd_metodo_pago, dd_estado]),
+                    ft.Button("Registrar en el Cuaderno", icon=ft.Icons.CHECK, on_click=guardar_venta, bgcolor="amber", color="white"),
                     ft.Divider(),
                     ft.Text("Actualizar o Borrar Registros", size=16, weight=ft.FontWeight.BOLD),
-                    ft.Row([txt_id_pagar, ft.OutlinedButton("Marcar como Pagado", icon=ft.Icons.TASK_ALT, on_click=marcar_como_pagado)], spacing=10, scroll=ft.ScrollMode.AUTO),
-                    ft.Row([txt_id_borrar_venta, ft.OutlinedButton("Eliminar Venta", icon=ft.Icons.DELETE, on_click=borrar_venta, style=ft.ButtonStyle(color="red"))], spacing=10, scroll=ft.ScrollMode.AUTO),
+                    ft.Row([txt_id_pagar, ft.OutlinedButton("Marcar como Pagado", icon=ft.Icons.TASK_ALT, on_click=marcar_como_pagado)], spacing=10),
+                    ft.Row([txt_id_borrar_venta, ft.OutlinedButton("Eliminar Venta", icon=ft.Icons.DELETE, on_click=borrar_venta, style=ft.ButtonStyle(color="red"))], spacing=10),
                     ft.Divider(),
-                    # Fila del historial y total de fiados con scroll horizontal nativo
-                    ft.Row([ft.Text("Historial de Registros", size=16, weight=ft.FontWeight.BOLD), txt_total_fiado], scroll=ft.ScrollMode.AUTO),
+                    ft.Row([ft.Text("Historial de Registros", size=16, weight=ft.FontWeight.BOLD), txt_total_fiado], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
                     txt_buscar,
+                    # Tabla envuelta en un contenedor con scroll horizontal para deslizarse a los lados sin romper la pantalla
                     ft.Row([tabla_historial], scroll=ft.ScrollMode.AUTO),
-                    ft.Container(height=300),
+                    ft.Container(height=150), # Margen inferior cómodo para el teclado del teléfono
                 ],
                 scroll=ft.ScrollMode.AUTO,
             )
@@ -557,18 +549,16 @@ def main(page: ft.Page):
                 except Exception as ex:
                     mostrar_snack(f"Error: {ex}", "red")
 
-            # Vista de inventario con desplazamiento horizontal en las filas y espacio para el teclado
             vista_principal.content = ft.Column(
                 [
                     ft.Text("Cargar Pedazos de Queso (Picar Barra)", size=16, weight=ft.FontWeight.BOLD),
-                    txt_nombre_barra,
-                    txt_peso_pedazo,
-                    txt_precio_pedazo,
-                    ft.Button("Agregar Pedazo a Vitrina", icon=ft.Icons.ADD_SHOPPING_CART, on_click=agregar_pedazo, bgcolor="amber", color="white", width=250),
+                    ft.Row([txt_nombre_barra, txt_peso_pedazo, txt_precio_pedazo]),
+                    ft.Button("Agregar Pedazo a Vitrina", icon=ft.Icons.ADD_SHOPPING_CART, on_click=agregar_pedazo, bgcolor="amber", color="white"),
                     ft.Divider(),
                     ft.Text("Stock de Pedazos en Vitrina", size=16, weight=ft.FontWeight.BOLD),
+                    # Tabla de inventario con scroll horizontal para poder deslizarla de lado a lado
                     ft.Row([tabla_inventario], scroll=ft.ScrollMode.AUTO),
-                    ft.Container(height=300),
+                    ft.Container(height=150),
                 ],
                 scroll=ft.ScrollMode.AUTO,
             )
