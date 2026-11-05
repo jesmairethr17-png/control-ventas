@@ -276,27 +276,27 @@ def main(page: ft.Page):
             
         btn_calendario = ft.IconButton(icon=ft.Icons.DATE_RANGE, icon_color="amber", on_click=lambda e: setattr(date_picker, "open", True) or page.update())
         
-        txt_cliente = ft.TextField(label="Nombre del Cliente", prefix_icon=ft.Icons.PERSON, border=ft.OutlineInputBorder(border_radius=12), filled=True, bgcolor="white")
-        txt_producto = ft.TextField(label="Tipo de Queso / Producto", prefix_icon=ft.Icons.SHOPPING_BAG, border=ft.OutlineInputBorder(border_radius=12), filled=True, bgcolor="white")
-        txt_peso = ft.TextField(label="Peso (Ej: 1.5kg o 700g)", prefix_icon=ft.Icons.SCALE, border=ft.OutlineInputBorder(border_radius=12), filled=True, bgcolor="white")
-        txt_precio_total = ft.TextField(label="Precio Total a Cobrar ($)", keyboard_type=ft.KeyboardType.NUMBER, prefix_icon=ft.Icons.ATTACH_MONEY, border=ft.OutlineInputBorder(border_radius=12), filled=True, bgcolor="white")
+        txt_cliente = ft.TextField(label="Nombre del Cliente", prefix_icon=ft.Icons.PERSON, border=ft.OutlineInputBorder(border_radius=12), filled=True, bgcolor="white", expand=True)
+        txt_producto = ft.TextField(label="Tipo de Queso / Producto", prefix_icon=ft.Icons.SHOPPING_BAG, border=ft.OutlineInputBorder(border_radius=12), filled=True, bgcolor="white", expand=True)
+        txt_peso = ft.TextField(label="Peso (Ej: 1.5kg o 700g)", prefix_icon=ft.Icons.SCALE, border=ft.OutlineInputBorder(border_radius=12), filled=True, bgcolor="white", expand=True)
+        txt_precio_total = ft.TextField(label="Precio Total a Cobrar ($)", keyboard_type=ft.KeyboardType.NUMBER, prefix_icon=ft.Icons.ATTACH_MONEY, border=ft.OutlineInputBorder(border_radius=12), filled=True, bgcolor="white", expand=True)
         
         dd_metodo_pago = ft.Dropdown(
             label="Método de Pago",
             options=[ft.dropdown.Option("Efectivo"), ft.dropdown.Option("Transferencia"), ft.dropdown.Option("Tarjeta (POS)")],
-            value="Efectivo", border=ft.OutlineInputBorder(border_radius=12), filled=True, bgcolor="white"
+            value="Efectivo", border=ft.OutlineInputBorder(border_radius=12), filled=True, bgcolor="white", expand=True
         )
         dd_estado = ft.Dropdown(
             label="Estado (Pago / Deuda)",
             options=[ft.dropdown.Option("Pagado"), ft.dropdown.Option("Fiado / Deuda")],
-            value="Pagado", border=ft.OutlineInputBorder(border_radius=12), filled=True, bgcolor="white"
+            value="Pagado", border=ft.OutlineInputBorder(border_radius=12), filled=True, bgcolor="white", expand=True
         )
         
         txt_buscar = ft.TextField(label="Buscar por nombre de cliente...", prefix_icon=ft.Icons.SEARCH, border=ft.OutlineInputBorder(border_radius=12), filled=True, bgcolor="white")
         txt_total_fiado = ft.Text("Total en deudas pendientes: $ 0", size=15, weight=ft.FontWeight.BOLD, color="red")
         
-        txt_id_pagar = ft.TextField(label="Nº de Registro a Pagar", width=200, border=ft.OutlineInputBorder(border_radius=12), filled=True, bgcolor="white", keyboard_type=ft.KeyboardType.NUMBER)
-        txt_id_borrar_venta = ft.TextField(label="Nº a Borrar", width=200, border=ft.OutlineInputBorder(border_radius=12), filled=True, bgcolor="white", keyboard_type=ft.KeyboardType.NUMBER)
+        txt_id_pagar = ft.TextField(label="Nº de Registro a Pagar", expand=True, border=ft.OutlineInputBorder(border_radius=12), filled=True, bgcolor="white", keyboard_type=ft.KeyboardType.NUMBER)
+        txt_id_borrar_venta = ft.TextField(label="Nº a Borrar", expand=True, border=ft.OutlineInputBorder(border_radius=12), filled=True, bgcolor="white", keyboard_type=ft.KeyboardType.NUMBER)
         
         mapa_ventas_ids = {}
         tabla_historial = ft.DataTable(
@@ -428,22 +428,23 @@ def main(page: ft.Page):
                     mostrar_snack(f"Error: {ex}", "red")
 
             txt_buscar.on_change = mostrar_vista_cuaderno
+            
             vista_principal.content = ft.Column(
                 [
                     ft.Text("Registrar Venta (Formato Cuaderno)", size=16, weight=ft.FontWeight.BOLD),
-                    ft.Row([txt_fecha, btn_calendario]),
-                    ft.Row([txt_cliente, txt_producto]),
-                    ft.Row([txt_peso, txt_precio_total]),
-                    ft.Row([dd_metodo_pago, dd_estado]),
+                    ft.Row([txt_fecha, btn_calendario], scroll=ft.ScrollMode.AUTO),
+                    ft.Row([txt_cliente, txt_producto], scroll=ft.ScrollMode.AUTO),
+                    ft.Row([txt_peso, txt_precio_total], scroll=ft.ScrollMode.AUTO),
+                    ft.Row([dd_metodo_pago, dd_estado], scroll=ft.ScrollMode.AUTO),
                     ft.Button("Registrar en el Cuaderno", icon=ft.Icons.CHECK, on_click=guardar_venta, bgcolor="amber", color="white"),
                     ft.Divider(),
                     ft.Text("Actualizar o Borrar Registros", size=16, weight=ft.FontWeight.BOLD),
-                    ft.Row([txt_id_pagar, ft.OutlinedButton("Marcar como Pagado", icon=ft.Icons.TASK_ALT, on_click=marcar_como_pagado)], spacing=10),
-                    ft.Row([txt_id_borrar_venta, ft.OutlinedButton("Eliminar Venta", icon=ft.Icons.DELETE, on_click=borrar_venta, style=ft.ButtonStyle(color="red"))], spacing=10),
+                    ft.Row([txt_id_pagar, ft.OutlinedButton("Marcar como Pagado", icon=ft.Icons.TASK_ALT, on_click=marcar_como_pagado)], spacing=10, scroll=ft.ScrollMode.AUTO),
+                    ft.Row([txt_id_borrar_venta, ft.OutlinedButton("Eliminar Venta", icon=ft.Icons.DELETE, on_click=borrar_venta, style=ft.ButtonStyle(color="red"))], spacing=10, scroll=ft.ScrollMode.AUTO),
                     ft.Divider(),
-                    ft.Row([ft.Text("Historial de Registros", size=16, weight=ft.FontWeight.BOLD), txt_total_fiado], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
+                    ft.Row([ft.Text("Historial de Registros", size=16, weight=ft.FontWeight.BOLD), txt_total_fiado], alignment=ft.MainAxisAlignment.SPACE_BETWEEN, scroll=ft.ScrollMode.AUTO),
                     txt_buscar,
-                    tabla_historial,
+                    ft.Row([tabla_historial], scroll=ft.ScrollMode.AUTO),
                 ],
                 scroll=ft.ScrollMode.AUTO,
             )
@@ -452,9 +453,9 @@ def main(page: ft.Page):
         # ---------------------------------------------------------
         # VISTA INVENTARIO MÓVIL
         # ---------------------------------------------------------
-        txt_nombre_barra = ft.TextField(label="Nombre / Tipo de Barra", hint_text="Ej: Barra Llanero 10kg", border=ft.OutlineInputBorder(border_radius=12), filled=True, bgcolor="white")
-        txt_peso_pedazo = ft.TextField(label="Peso del Pedazo Cortado", hint_text="Ej: 1.2kg o 750g", border=ft.OutlineInputBorder(border_radius=12), filled=True, bgcolor="white")
-        txt_precio_pedazo = ft.TextField(label="Precio del Pedazo ($)", hint_text="Ej: 9000", keyboard_type=ft.KeyboardType.NUMBER, border=ft.OutlineInputBorder(border_radius=12), filled=True, bgcolor="white")
+        txt_nombre_barra = ft.TextField(label="Nombre / Tipo de Barra", hint_text="Ej: Barra Llanero 10kg", border=ft.OutlineInputBorder(border_radius=12), filled=True, bgcolor="white", expand=True)
+        txt_peso_pedazo = ft.TextField(label="Peso del Pedazo Cortado", hint_text="Ej: 1.2kg o 750g", border=ft.OutlineInputBorder(border_radius=12), filled=True, bgcolor="white", expand=True)
+        txt_precio_pedazo = ft.TextField(label="Precio del Pedazo ($)", hint_text="Ej: 9000", keyboard_type=ft.KeyboardType.NUMBER, border=ft.OutlineInputBorder(border_radius=12), filled=True, bgcolor="white", expand=True)
         
         mapa_inventario_ids = {}
         tabla_inventario = ft.DataTable(
@@ -548,11 +549,11 @@ def main(page: ft.Page):
             vista_principal.content = ft.Column(
                 [
                     ft.Text("Cargar Pedazos de Queso (Picar Barra)", size=16, weight=ft.FontWeight.BOLD),
-                    ft.Row([txt_nombre_barra, txt_peso_pedazo, txt_precio_pedazo]),
+                    ft.Row([txt_nombre_barra, txt_peso_pedazo, txt_precio_pedazo], scroll=ft.ScrollMode.AUTO),
                     ft.Button("Agregar Pedazo a Vitrina", icon=ft.Icons.ADD_SHOPPING_CART, on_click=agregar_pedazo, bgcolor="amber", color="white"),
                     ft.Divider(),
                     ft.Text("Stock de Pedazos en Vitrina", size=16, weight=ft.FontWeight.BOLD),
-                    tabla_inventario,
+                    ft.Row([tabla_inventario], scroll=ft.ScrollMode.AUTO),
                 ],
                 scroll=ft.ScrollMode.AUTO,
             )
