@@ -436,25 +436,26 @@ def main(page: ft.Page):
 
             txt_buscar.on_change = mostrar_vista_cuaderno
             
-            # Vista del cuaderno con espacio inferior extra (padding) para evitar que el teclado tape los campos
+            # Vista del cuaderno con scroll horizontal habilitado en las filas clave y espacio para el teclado
             vista_principal.content = ft.Column(
                 [
                     ft.Text("Registrar Venta (Formato Cuaderno)", size=16, weight=ft.FontWeight.BOLD),
-                    ft.Row([txt_fecha, btn_calendario], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
+                    ft.Row([txt_fecha, btn_calendario], scroll=ft.ScrollMode.AUTO),
                     txt_cliente,
                     txt_producto,
-                    ft.Row([txt_peso, txt_precio_total]),
-                    ft.Row([dd_metodo_pago, dd_estado]),
+                    ft.Row([txt_peso, txt_precio_total], scroll=ft.ScrollMode.AUTO),
+                    ft.Row([dd_metodo_pago, dd_estado], scroll=ft.ScrollMode.AUTO),
                     ft.Button("Registrar en el Cuaderno", icon=ft.Icons.CHECK, on_click=guardar_venta, bgcolor="amber", color="white", width=250),
                     ft.Divider(),
                     ft.Text("Actualizar o Borrar Registros", size=16, weight=ft.FontWeight.BOLD),
-                    ft.Row([txt_id_pagar, ft.OutlinedButton("Marcar como Pagado", icon=ft.Icons.TASK_ALT, on_click=marcar_como_pagado)], spacing=10),
-                    ft.Row([txt_id_borrar_venta, ft.OutlinedButton("Eliminar Venta", icon=ft.Icons.DELETE, on_click=borrar_venta, style=ft.ButtonStyle(color="red"))], spacing=10),
+                    ft.Row([txt_id_pagar, ft.OutlinedButton("Marcar como Pagado", icon=ft.Icons.TASK_ALT, on_click=marcar_como_pagado)], spacing=10, scroll=ft.ScrollMode.AUTO),
+                    ft.Row([txt_id_borrar_venta, ft.OutlinedButton("Eliminar Venta", icon=ft.Icons.DELETE, on_click=borrar_venta, style=ft.ButtonStyle(color="red"))], spacing=10, scroll=ft.ScrollMode.AUTO),
                     ft.Divider(),
-                    ft.Row([ft.Text("Historial de Registros", size=16, weight=ft.FontWeight.BOLD), txt_total_fiado], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
+                    # Fila del historial y total de fiados con scroll horizontal nativo
+                    ft.Row([ft.Text("Historial de Registros", size=16, weight=ft.FontWeight.BOLD), txt_total_fiado], scroll=ft.ScrollMode.AUTO),
                     txt_buscar,
                     ft.Row([tabla_historial], scroll=ft.ScrollMode.AUTO),
-                    ft.Container(height=300), # Espacio clave para el teclado móvil
+                    ft.Container(height=300),
                 ],
                 scroll=ft.ScrollMode.AUTO,
             )
@@ -556,7 +557,7 @@ def main(page: ft.Page):
                 except Exception as ex:
                     mostrar_snack(f"Error: {ex}", "red")
 
-            # Vista de inventario con espacio inferior extra para el teclado
+            # Vista de inventario con desplazamiento horizontal en las filas y espacio para el teclado
             vista_principal.content = ft.Column(
                 [
                     ft.Text("Cargar Pedazos de Queso (Picar Barra)", size=16, weight=ft.FontWeight.BOLD),
@@ -567,7 +568,7 @@ def main(page: ft.Page):
                     ft.Divider(),
                     ft.Text("Stock de Pedazos en Vitrina", size=16, weight=ft.FontWeight.BOLD),
                     ft.Row([tabla_inventario], scroll=ft.ScrollMode.AUTO),
-                    ft.Container(height=300), # Espacio clave para el teclado móvil
+                    ft.Container(height=300),
                 ],
                 scroll=ft.ScrollMode.AUTO,
             )
