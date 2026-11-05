@@ -154,6 +154,7 @@ def main(page: ft.Page):
                 ft.Container(height=10),
                 ft.Button("Registrarse", icon=ft.Icons.CHECK, on_click=ejecutar_registro, bgcolor="amber", color="white"),
                 ft.OutlinedButton("Volver al Login", icon=ft.Icons.ARROW_BACK, on_click=lambda e: cargar_pantalla_login()),
+                ft.Container(height=250),
             ],
             horizontal_alignment=ft.CrossAxisAlignment.CENTER,
             scroll=ft.ScrollMode.AUTO,
@@ -231,6 +232,7 @@ def main(page: ft.Page):
                 btn_verificar_user,
                 btn_cambiar_pass,
                 ft.OutlinedButton("Cancelar", icon=ft.Icons.CANCEL, on_click=lambda e: cargar_pantalla_login()),
+                ft.Container(height=250),
             ],
             horizontal_alignment=ft.CrossAxisAlignment.CENTER,
             scroll=ft.ScrollMode.AUTO,
@@ -434,7 +436,7 @@ def main(page: ft.Page):
 
             txt_buscar.on_change = mostrar_vista_cuaderno
             
-            # Estructura organizada en columna para perfecta visualización móvil y de escritorio
+            # Vista del cuaderno con espacio inferior extra (padding) para evitar que el teclado tape los campos
             vista_principal.content = ft.Column(
                 [
                     ft.Text("Registrar Venta (Formato Cuaderno)", size=16, weight=ft.FontWeight.BOLD),
@@ -452,6 +454,7 @@ def main(page: ft.Page):
                     ft.Row([ft.Text("Historial de Registros", size=16, weight=ft.FontWeight.BOLD), txt_total_fiado], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
                     txt_buscar,
                     ft.Row([tabla_historial], scroll=ft.ScrollMode.AUTO),
+                    ft.Container(height=300), # Espacio clave para el teclado móvil
                 ],
                 scroll=ft.ScrollMode.AUTO,
             )
@@ -553,6 +556,7 @@ def main(page: ft.Page):
                 except Exception as ex:
                     mostrar_snack(f"Error: {ex}", "red")
 
+            # Vista de inventario con espacio inferior extra para el teclado
             vista_principal.content = ft.Column(
                 [
                     ft.Text("Cargar Pedazos de Queso (Picar Barra)", size=16, weight=ft.FontWeight.BOLD),
@@ -563,6 +567,7 @@ def main(page: ft.Page):
                     ft.Divider(),
                     ft.Text("Stock de Pedazos en Vitrina", size=16, weight=ft.FontWeight.BOLD),
                     ft.Row([tabla_inventario], scroll=ft.ScrollMode.AUTO),
+                    ft.Container(height=300), # Espacio clave para el teclado móvil
                 ],
                 scroll=ft.ScrollMode.AUTO,
             )
